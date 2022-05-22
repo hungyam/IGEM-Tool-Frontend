@@ -1,21 +1,25 @@
 import {
-    Box,
+    Box, Button, Drawer, DrawerBody, DrawerContent, DrawerOverlay,
     Flex,
-    Icon,
-    Text,
-    useColorModeValue,
+    Icon, IconButton, Switch,
+    Text, useColorMode,
+    useColorModeValue, useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
-import {FaBook, FaHandsHelping, FaHome, FaSearch, FaTools} from "react-icons/fa";
-import {Link} from "react-router-dom";
+import React, {useEffect} from "react";
+import {FaBook, FaHandsHelping, FaHome, FaSearch, FaSun, FaTools} from "react-icons/fa";
+import {Link, useHref, useLocation, useMatch} from "react-router-dom";
+import {FiList} from "react-icons/fi";
 
 function NavItem(props) {
     // Color Settings
     const textColor = useColorModeValue("gray.600", "gray.400");
-    const hoverBgColor = useColorModeValue("gray.100", "gray.900");
+    const hoverBgColor = useColorModeValue("whiteAlpha.900", "blackAlpha.100");
     const hoverTextColor = useColorModeValue("gray.900", "gray.200");
+    const selectedColor = useColorModeValue("whiteAlpha.900", "blackAlpha.700")
+    const location = useLocation()
 
-    const {icon, children} = props;
+
+    const {icon, children, path} = props;
 
     return (
         <Flex
@@ -30,6 +34,9 @@ function NavItem(props) {
             }}
             fontWeight="600"
             transition=".15s ease"
+            bgColor={path === location.pathname && selectedColor}
+            color={path === location.pathname && 'teal.700'}
+            boxShadow={path === location.pathname && 'sm'}
         >
             {icon && (
                 <Icon
@@ -47,9 +54,9 @@ function NavItem(props) {
 function SidebarContent(props) {
     // Color Settings
     const textColor = useColorModeValue("brand.500", "white");
-    const bgColor = useColorModeValue("white", "gray.800");
-    const borderColor = useColorModeValue("inherit", "gray.700");
+    const bgColor = useColorModeValue("whiteAlpha.700", "blackAlpha.700");
 
+    const {...rest} = props
 
     return (
         <Box
@@ -60,10 +67,9 @@ function SidebarContent(props) {
             zIndex="sticky"
             h="full"
             bg={bgColor}
-            borderColor={borderColor}
-            borderRightWidth="1px"
+            backdropBlur='10px'
             w="60"
-            display='block'
+            {...rest}
         >
             <Flex px="4" py="5" align="center">
                 <Text
@@ -80,19 +86,24 @@ function SidebarContent(props) {
                 fontSize="sm"
             >
                 <Link to="/">
-                    <NavItem icon={FaHome}>HOME</NavItem>
+                    <NavItem path='/'
+                             icon={FaHome}>HOME</NavItem>
                 </Link>
                 <Link to="/search">
-                    <NavItem icon={FaSearch}>SEARCH</NavItem>
+                    <NavItem path='/search'
+                             icon={FaSearch}>SEARCH</NavItem>
                 </Link>
                 <Link to="/tool">
-                    <NavItem icon={FaTools}>TOOL</NavItem>
+                    <NavItem path='/tool'
+                             icon={FaTools}>TOOL</NavItem>
                 </Link>
                 <Link to="/help">
-                    <NavItem icon={FaHandsHelping}>HELP</NavItem>
+                    <NavItem path='/help'
+                             icon={FaHandsHelping}>HELP</NavItem>
                 </Link>
                 <Link to="/reference">
-                    <NavItem icon={FaBook}>REFERENCE</NavItem>
+                    <NavItem path='/reference'
+                             icon={FaBook}>REFERENCE</NavItem>
                 </Link>
             </Flex>
         </Box>
@@ -101,9 +112,7 @@ function SidebarContent(props) {
 
 function Header(props) {
     // Color Settings
-    const bgColor = useColorModeValue("white", "gray.800");
-    const borderColor = useColorModeValue("inherit", "gray.700");
-
+    const bgColor = useColorModeValue("whiteAlpha.600", "blackAlpha.600");
 
     return (
         <Flex
@@ -113,8 +122,7 @@ function Header(props) {
             w="full"
             px="4"
             bg={bgColor}
-            borderBottomWidth="1px"
-            borderColor={borderColor}
+            backdropBlur='10px'
             h="14"
         >
             {props.children}
@@ -123,25 +131,39 @@ function Header(props) {
 }
 
 
-
 export default function Sidebar(props) {
-    // Color Settings
-    const bgColor = useColorModeValue("gray.50", "gray.700");
+    const mark = useColorModeValue("linear-gradient(0deg, #ffffff 20%, rgba(255, 255, 255, 0) 100%)", "linear-gradient(0deg, #00000090 20%, rgba(255, 255, 255, 0) 100%)")
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
-        <Box
-            bg={bgColor}
-            minH="100vh"
-        >
-            <SidebarContent/>
-            <Box ml='60'>
-                <Header>
-
-                </Header>
-                <Box as="main" p="4">
-                    {props.children}
+        <>
+            <Box
+                bgImg='linear-gradient(60deg, #FFFFFF 0%, rgba(0, 61, 255, 0.2) 30%, #4AC1A240 80%, rgba(255, 255, 255, 0.36) 100%)'
+                minH="100vh"
+            >
+                <Box bgImg={mark} minH='100vh'>
+                    <SidebarContent display={{base: 'none', md: 'block'}}/>
+                    <Box ml={{base: 0, md: 60}}>
+                        <Header>
+                            <IconButton onClick={onOpen} icon={<FiList/>} display={{base: 'inline-flex', md: 'none'}}/>
+                            {props.title}
+                        </Header>
+                        <Box as="main"
+                             pos='relative'
+                        >
+                            {props.children}
+                        </Box>
+                    </Box>
                 </Box>
             </Box>
-        </Box>
+            <Drawer isOpen={isOpen} placement='left' onClose={onClose}>
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerBody>
+                        <SidebarContent/>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+        </>
     );
 }

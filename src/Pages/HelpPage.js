@@ -2,7 +2,7 @@ import {Box} from "@chakra-ui/react";
 
 export default function HelpPage() {
     return (
-        <Box>
+        <Box position='absolute'>
             <h1>Help Page</h1>
         </Box>
     );

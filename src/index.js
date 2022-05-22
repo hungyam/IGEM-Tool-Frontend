@@ -1,40 +1,59 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 import Sidebar from './Components/Sidebar_hy';
 import {ChakraProvider, extendTheme} from "@chakra-ui/react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import {} from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import SearchPage from "./Pages/SearchPage";
 import ToolPage from "./Pages/ToolPage";
 import HelpPage from "./Pages/HelpPage";
 import ReferencePage from "./Pages/ReferencePage";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
+import TablePage from "./Pages/TablePage";
 
 const config = {
-    initialColorMode: "dark",
+    initialColorMode: 'dark',
     useSystemColorMode: true
 };
 
 const theme = extendTheme({ config });
 
+function RouterMachine() {
+    const location = useLocation()
+
+    return (
+            <Sidebar>
+                <TransitionGroup component={null}>
+                    <CSSTransition key={location.key}
+                                   timeout={300}
+                                   classNames='page'>
+                        <Routes location={location}>
+                            <Route path="/" element={<HomePage/>}/>
+                            <Route path="search" element={<SearchPage/>}/>
+                            <Route path="table" element={<TablePage/>}/>
+                            <Route path="tool" element={<ToolPage/>}/>
+                            <Route path="help" element={<HelpPage/>}/>
+                            <Route path="reference" element={<ReferencePage/>}/>
+                        </Routes>
+                    </CSSTransition>
+                </TransitionGroup>
+            </Sidebar>
+    )
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <ChakraProvider theme={theme}>
-        <BrowserRouter>
-            <Sidebar>
-                <Routes>
-                    <Route path="/" exact element={HomePage()}/>
-                    <Route path="/search" exact element={SearchPage()}/>
-                    <Route path="/tool" exact element={ToolPage()}/>
-                    <Route path="/help" exact element={HelpPage()}/>
-                    <Route path="/reference" exact element={ReferencePage()}/>
-                </Routes>
-            </Sidebar>
-        </BrowserRouter>
-    </ChakraProvider>
+    <>
+        <ChakraProvider theme={theme}>
+            <BrowserRouter>
+                <RouterMachine/>
+            </BrowserRouter>
+        </ChakraProvider>
+    </>
 );
 
 // If you want to start measuring performance in your app, pass a function
