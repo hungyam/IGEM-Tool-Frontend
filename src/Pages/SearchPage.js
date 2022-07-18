@@ -4,7 +4,7 @@ import {
     Heading, HStack,
     Input,
     InputGroup,
-    InputLeftAddon, Link, ListItem, Table, TableContainer, Tag, Tbody, Td,
+    InputLeftAddon, Link, ListItem, Spacer, Table, TableContainer, Tag, Tbody, Td,
     Text, Th, Thead, Tr, UnorderedList,
     useColorModeValue, useDisclosure, useToast,
 } from "@chakra-ui/react";
@@ -70,6 +70,24 @@ export default function SearchPage() {
             })
     }
 
+    const downloadAllData = () => {
+        axios({
+            url: 'http://localhost:8000/download',
+            method: 'GET',
+            responseType: 'blob',
+        }).then((response) => {
+            const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+            const fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+            fileLink.setAttribute('download', 'Data.csv');
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
+            fileLink.remove()
+        });
+    }
+
     useEffect(() => {
         loadData()
     },[])
@@ -86,12 +104,18 @@ export default function SearchPage() {
                  bgColor={bgColor}
                  borderRadius='md'
             >
-                <Heading fontSize='30'
-                         fontWeight='600'
-                >
-                    Search
-                </Heading>
-                <Box m='6'>
+                <Flex alignItems='flex-start'>
+                    <Heading fontSize='30'
+                             fontWeight='600'
+                    >
+                        Search
+                    </Heading>
+                    <Spacer/>
+                    <Button onClick={downloadAllData} colorScheme='blue' mr='6' mt='6' size='sm'>
+                        Download all data
+                    </Button>
+                </Flex>
+                <Box mx='6' mb='5'>
                     <Text mb='2'
                           fontSize='lg'
                     >
