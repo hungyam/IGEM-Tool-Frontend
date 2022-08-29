@@ -1,10 +1,13 @@
-import {Box} from "@chakra-ui/react";
+import React from "react";
+import {
+    Text, 
 
-export default function HomePage() {
+} from "@chakra-ui/react";
+const HomePage = (props) => {
+    return(
+        <Text align="center" fontSize="2xl" padding="300px" overflow="hidden">Welcome to DIFENSE!!!</Text>
+    )   
 
-    return (
-        <Box position='absolute'>
-            <h1>Home Page</h1>
-        </Box>
-    );
-}
+    
+};
+export default HomePage;

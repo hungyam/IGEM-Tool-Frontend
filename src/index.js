@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 
 import Sidebar from './Components/Sidebar_hy';
 import {ChakraProvider, extendTheme} from "@chakra-ui/react";
-import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
+import {BrowserRouter, Route, Routes, useLocation , HashRouter} from "react-router-dom";
 import {} from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import SearchPage from "./Pages/SearchPage";
@@ -26,7 +26,7 @@ function RouterMachine() {
     const location = useLocation()
 
     return (
-            <Sidebar>
+            <Sidebar title="A platform for searching and predicting prokaryotic defence system">
                 <TransitionGroup component={null}>
                     <CSSTransition key={location.key}
                                    timeout={300}
