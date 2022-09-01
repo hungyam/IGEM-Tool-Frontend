@@ -122,7 +122,7 @@ const HomePage = (props) => {
     })
 
     useEffect(() => {
-        axios.get('http://localhost:8000/mes/')
+        axios.get('http://39.108.14.181:1433/mes/')
             .then((response) => {
                 setData(response.data.data)
             })

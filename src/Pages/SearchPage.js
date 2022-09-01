@@ -61,7 +61,7 @@ export default function SearchPage() {
 
     const downloadAllData = () => {
         axios({
-            url: 'http://localhost:8000/download',
+            url: 'http://39.108.14.181:1433/download',
             method: 'GET',
             responseType: 'blob',
         }).then((response) => {
@@ -78,14 +78,14 @@ export default function SearchPage() {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8000/species')
+        axios.get('http://39.108.14.181:1433/species')
             .then(response => {
                 setSpeciesList(response.data.species)
             })
             .catch(() => {
                 console.log('ERROR!')
             })
-        axios.get('http://localhost:8000/system')
+        axios.get('http://39.108.14.181:1433/system')
             .then(response => {
                 setSystemList(response.data.system)
             })

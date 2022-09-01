@@ -42,7 +42,7 @@ export default function TablePage() {
     const [pageNow, setPageNow] = useState(0)
 
     useEffect(() => {
-        axios.post('http://localhost:8000/data/' + pageNow + '/', {
+        axios.post('http://39.108.14.181:1433/data/' + pageNow + '/', {
             'system': system_key,
             'species': species_key,
             'name': name_key
@@ -60,7 +60,7 @@ export default function TablePage() {
         if (selectId.length === 0)
             return false
         axios({
-            url: 'http://localhost:8000/download/',
+            url: 'http://39.108.14.181:1433/download/',
             data: {'index': selectId},
             method: 'POST',
             responseType: 'blob',
@@ -81,7 +81,7 @@ export default function TablePage() {
         if (isLoadingNew || dataLength === data.length) return
         if (scrollRef.current.scrollTop >= tableRef.current.clientHeight - scrollRef.current.clientHeight) {
             setIsLoadingNew(true)
-            axios.post('http://localhost:8000/data/' + pageNow + '/', {
+            axios.post('http://39.108.14.181:1433/data/' + pageNow + '/', {
                 'system': system_key,
                 'species': species_key,
                 'name': name_key
