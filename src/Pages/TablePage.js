@@ -1,12 +1,12 @@
 import {
     Box,
-    Button,
+    Button, Center,
     Checkbox,
     Flex,
     Heading,
     Skeleton,
-    Spacer,
-    Table,
+    Spacer, Spinner,
+    Table, TableCaption,
     TableContainer,
     Tbody,
     Td,
@@ -90,9 +90,9 @@ export default function TablePage() {
                     setData(data.concat(response.data.data))
                     setIsLoad(true)
                     setPageNow(pageNow + 1)
+                    setIsLoadingNew(false)
                 })
                 .catch(() => console.log('Get data error!'))
-            setIsLoadingNew(false)
         }
     }
 
@@ -201,7 +201,19 @@ export default function TablePage() {
                                             }}/></Td>
                                         </Tr>
                                     ))}
+
                                 </Tbody>
+
+                                <TableCaption mb='2'>
+                                    {isLoadingNew ?
+                                        <Center w='100%'>
+                                            <Spinner size='lg'/>
+                                        </Center> :
+                                        <Center w='100%'>
+                                            <Text fontSize='lg'>下拉加载更多数据</Text>
+                                        </Center>
+                                    }
+                                </TableCaption>
                             </Table>
                         </TableContainer>
                     </Skeleton>

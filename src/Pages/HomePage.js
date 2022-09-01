@@ -22,7 +22,7 @@ function StatsCard(props) {
             rounded={'lg'}>
             <Flex justifyContent={'space-between'}>
                 <Box pl={{base: 2, md: 4}}>
-                    <StatLabel fontWeight={'medium'} isTruncated>
+                    <StatLabel fontWeight={'medium'}>
                         {title}
                     </StatLabel>
                     <StatNumber fontSize={'2xl'} fontWeight={'medium'}>
@@ -83,29 +83,18 @@ function Chart(props) {
                 color: useColorModeValue('black', 'white')
             }
         },
-        tooltip: {},
-        legend: {
-            data: 'count'
-        },
         xAxis: {
             type: 'category',
             data: props.data.x,
-            nameTextStyle: {
-                color: useColorModeValue('black', 'white')
-            }
         },
         yAxis: {
-            nameTextStyle: {
-                color: useColorModeValue('black', 'white')
-            }
+            type: 'value'
         },
         series: [{
             type: 'bar',
             data: props.data.y,
             itemStyle: {
-                normal: {
-                    borderRadius: 4,
-                }
+                borderRadius: 4,
             },
             color: props.color
         }]
