@@ -1,12 +1,34 @@
 import {
-    Box, Button, color, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay,
+    Box,
+    Button,
+    Drawer,
+    DrawerBody,
+    DrawerCloseButton,
+    DrawerContent,
+    DrawerHeader,
+    DrawerOverlay,
     Flex,
-    Heading, HStack,
+    Heading,
+    HStack,
     Input,
     InputGroup,
-    InputLeftAddon, Link, ListItem, Spacer, Table, TableContainer, Tag, Tbody, Td,
-    Text, Th, Thead, Tr, UnorderedList,
-    useColorModeValue, useDisclosure, useToast,
+    InputLeftAddon,
+    Link,
+    ListItem,
+    Spacer,
+    Table,
+    TableContainer,
+    Tag,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr,
+    UnorderedList,
+    useColorModeValue,
+    useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
@@ -17,7 +39,7 @@ import axios from "axios";
 export default function SearchPage() {
     //Color Settings
     const borderColor = useColorModeValue('gray.200', 'gray.600')
-    const bgColor = useColorModeValue('whiteAlpha.800', 'gray.800')
+    const bgColor = useColorModeValue('whiteAlpha.800', 'gray.700')
     const tipBgColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
     const tipBorderColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400')
 
@@ -26,48 +48,15 @@ export default function SearchPage() {
     const [value_3, setValue_3] = useState('')
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [speciesList, setSpeciesList] = useState([])
+    //eslint-disable-next-line
     const [systemList, setSystemList] = useState([])
     const toast = useToast()
 
     const navigate = useNavigate()
 
     const Submit = () => {
-        let type
-        let keyword = null
-        if (value_1 === '' && value_2 === '' && value_3 === '') {
-            type = 'all'
-        }else if (value_1 !== '') {
-            type = 'species'
-            keyword = value_1
-        }else if (value_2 !== '') {
-            type = 'system'
-            keyword = value_2
-        }else if (value_3 !== '') {
-            type = 'gene'
-            keyword = value_3
-        }
-        let url = '../table?type=' + type
-        if (keyword != null) {
-            url += ('&keyword=' + keyword)
-        }
+        let url = '../table?species=' + value_1 + '&system=' + value_2 + '&name=' + value_3
         navigate(url)
-    }
-
-    const loadData = () => {
-        axios.get('http://localhost:8000/species')
-            .then(response => {
-                setSpeciesList(response.data.species)
-            })
-            .catch(() => {
-                console.log('ERROR!')
-            })
-        axios.get('http://localhost:8000/system')
-            .then(response => {
-                setSystemList(response.data.system)
-            })
-            .catch(() => {
-                console.log('ERROR!')
-            })
     }
 
     const downloadAllData = () => {
@@ -89,22 +78,34 @@ export default function SearchPage() {
     }
 
     useEffect(() => {
-        loadData()
+        axios.get('http://localhost:8000/species')
+            .then(response => {
+                setSpeciesList(response.data.species)
+            })
+            .catch(() => {
+                console.log('ERROR!')
+            })
+        axios.get('http://localhost:8000/system')
+            .then(response => {
+                setSystemList(response.data.system)
+            })
+            .catch(() => {
+                console.log('ERROR!')
+            })
     },[])
 
     return (
-        <Box position='absolute'
-             w='100%'
-             p='3'
+        <Box w='100%'
+             p='5'
         >
             <Box borderWidth='1px'
                  borderStyle='solid'
                  borderColor={borderColor}
                  p='5'
                  bgColor={bgColor}
-                 borderRadius='md'
+                 borderRadius='2xl'
             >
-                <Flex alignItems='flex-start'>
+                <Flex alignItems='flex-start' mb='5'>
                     <Heading fontSize='30'
                              fontWeight='600'
                     >
@@ -115,7 +116,7 @@ export default function SearchPage() {
                         Download all data
                     </Button>
                 </Flex>
-                <Box mx='6' mb='5'>
+                <Box mx='6' mb='80px'>
                     <Text mb='2'
                           fontSize='lg'
                     >
@@ -127,23 +128,20 @@ export default function SearchPage() {
                         <InputGroup variant='filled'>
                             <InputLeftAddon children='Species:' />
                             <Input value={value_1}
-                                   isDisabled={value_2 !== '' || value_3 !== ''}
                                    onChange={(e) => setValue_1(e.target.value)}/>
                         </InputGroup>
                         <InputGroup variant='filled'>
                             <InputLeftAddon children='System:' />
                             <Input value={value_2}
-                                   isDisabled={value_1 !== '' || value_3 !== ''}
                                    onChange={(e) => setValue_2(e.target.value)}/>
                         </InputGroup>
                         <InputGroup variant='filled'>
                             <InputLeftAddon children='Gene/Protein:' />
                             <Input value={value_3}
-                                   isDisabled={value_1 !== '' || value_2 !== ''}
                                    onChange={(e) => setValue_3(e.target.value)}/>
                         </InputGroup>
                     </HStack>
-                    <Flex justifyContent='flex-end'>
+                    <Flex justifyContent='flex-end' mt='10'>
                         <Button mr='3'
                                 onClick={Submit}
                                 colorScheme='teal'

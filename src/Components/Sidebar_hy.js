@@ -1,37 +1,39 @@
 import {
-    Box, Button, Drawer, DrawerBody, DrawerContent, DrawerOverlay,
+    Badge,
+    Box,
+    Center,
+    Drawer,
+    DrawerBody,
+    DrawerContent,
+    DrawerOverlay,
     Flex,
-    Heading,
-    Icon, IconButton, Switch,
-    Text, useColorMode,
-    useColorModeValue, useDisclosure,
-    Badge, chakra, VisuallyHidden, Container, Stack, Image, Tooltip, HStack
-
+    Icon,
+    IconButton,
+    Image,
+    Text,
+    Tooltip,
+    useColorMode,
+    useColorModeValue,
+    useDisclosure,
+    chakra
 } from "@chakra-ui/react";
 // import {Link} from "@chakra-ui/react";
-import React, {useEffect, ReactNode} from "react";
-import {FaBook, FaHandsHelping, FaHome, FaSearch, FaSun, FaTools} from "react-icons/fa";
-import {useHref, useLocation, useMatch, Link} from "react-router-dom";
+import React from "react";
+import {FaBook, FaHandsHelping, FaHome, FaImage, FaSearch, FaTools} from "react-icons/fa";
+import {Link, useLocation} from "react-router-dom";
 import {FiList} from "react-icons/fi";
-import { default as Layout } from "./layout.js";
-import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {default as Layout} from "./layout.js";
+import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 
-import {
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-} from "@chakra-ui/react";
-
-import { AnimatePresence, motion } from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 
 
 function NavItem(props) {
     // Color Settings
-    const textColor = useColorModeValue("gray.600", "gray.400");
-    const hoverBgColor = useColorModeValue("whiteAlpha.900", "blackAlpha.100");
+    const hoverBgColor = useColorModeValue("whiteAlpha.900", "blackAlpha.700");
     const hoverTextColor = useColorModeValue("gray.900", "gray.200");
-    const selectedColor = useColorModeValue("whiteAlpha.900", "blackAlpha.700")
+    const selectedBGColor = useColorModeValue("whiteAlpha.900", "gray.700")
+    const selectedColor = useColorModeValue("blue.700", "blue.300")
     const location = useLocation()
 
 
@@ -43,15 +45,14 @@ function NavItem(props) {
             px="4"
             py="3"
             cursor="pointer"
-            // color={textColor}
             _hover={{
                 bg: hoverBgColor,
                 color: hoverTextColor,
             }}
             fontWeight="600"
             transition=".15s ease"
-            bgColor={path === location.pathname && selectedColor}
-            color={path === location.pathname && 'teal.700'}
+            bgColor={path === location.pathname && selectedBGColor}
+            color={path === location.pathname && selectedColor}
             boxShadow={path === location.pathname && 'sm'}
         >
             {icon && (
@@ -69,8 +70,7 @@ function NavItem(props) {
 
 function SidebarContent(props) {
     // Color Settings
-    const textColor = useColorModeValue("brand.500", "white");
-    const bgColor = useColorModeValue("whiteAlpha.700", "blackAlpha.700");
+    const bgColor = useColorModeValue("whiteAlpha.700", "blackAlpha.600");
 
     const {...rest} = props
 
@@ -84,22 +84,12 @@ function SidebarContent(props) {
             h="full"
             bg={bgColor}
             backdropBlur='10px'
-            w="60"
+            w={{base: 'full', md: '60'}}
             {...rest}
         >
-            <Flex px="4" py="5" align="center">
-                <Text
-                    fontSize="2xl"
-                    ml="2"
-                    color={textColor}
-                    fontWeight="600"
-                >
-                    <Image src="Logo.jpg" alt="DS3P" borderRadius='full' 
-                
-                     
-                    />
-                </Text>
-            </Flex>
+            <Center px={10} py={5}>
+                <Image src="Logo.jpg" alt="DS3P" borderRadius='full' border='3px solid white'/>
+            </Center>
             <Flex
                 direction="column"
                 fontSize="sm"
@@ -111,6 +101,10 @@ function SidebarContent(props) {
                 <Link to="/search">
                     <NavItem path='/search'
                              icon={FaSearch}>SEARCH</NavItem>
+                </Link>
+                <Link to="/model">
+                    <NavItem path='/model'
+                             icon={FaImage}>MODEL</NavItem>
                 </Link>
                 <Link to="/tool">
                     <NavItem path='/tool'
@@ -144,137 +138,122 @@ function Header(props) {
             backdropBlur='10px'
             h="14"
             textAlign="center"
+            {...props}
         >
             {props.children}
         </Flex>
     )
 }
 
-function Footer(props) {
+function Footer() {
     return (
-        <Box
-            bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
-            // rounded={'full'}
-            w={8}
-            h={8}
-            cursor={'pointer'}
-            as={'a'}
-            href={props.href}
-            display={'inline-flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            transition={'background 0.3s ease'}
-            _hover={{
-            bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
-            }}>
-            <VisuallyHidden>{props.label}</VisuallyHidden>
-            {props.children}
-        </Box>
-)
+        <Flex
+            w="full"
+            bg="#edf3f8"
+            _dark={{
+                bg: "#3e3e3e",
+            }}
+            alignItems="center"
+            justifyContent="center"
+            boxShadow='2xl'
+        >
+            <Flex
+                w="full"
+                as="footer"
+                flexDir={{
+                    base: "column",
+                    sm: "row",
+                }}
+                align="center"
+                justify="space-between"
+                px="6"
+                py="2"
+                bg="white"
+                _dark={{
+                    bg: "gray.800",
+                }}
+            >
+                <Badge fontSize='sm'  colorScheme="cyan">
+                    @2022 SYSU-Software
+                </Badge>
+
+                <chakra.p
+                    py={{
+                        base: "2",
+                        sm: "0",
+                    }}
+                >
+                    All rights reserved
+                </chakra.p>
+                <Layout/>
+            </Flex>
+        </Flex>
+
+    )
 }
 
 
 export default function Sidebar(props) {
-    const mark = useColorModeValue("linear-gradient(0deg, #ffffff 20%, rgba(255, 255, 255, 0) 100%)", "linear-gradient(0deg, #00000090 20%, rgba(255, 255, 255, 0) 100%)")
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const { colorMode, toggleColorMode } = useColorMode();
+    const mark = useColorModeValue("linear-gradient(0deg, #ffffff 20%, rgba(255, 255, 255, 0) 100%)", "linear-gradient(0deg, #1A202C 20%, #1A202C 100%)")
+    const {isOpen, onOpen, onClose} = useDisclosure()
+    const {colorMode, toggleColorMode} = useColorMode();
     return (
         <>
             <Box
                 bgImg='linear-gradient(60deg, #FFFFFF 0%, rgba(0, 61, 255, 0.2) 30%, #4AC1A240 80%, rgba(255, 255, 255, 0.36) 100%)'
                 minH="100vh"
             >
-                <Box bgImg={mark} minH='100vh'>
-                    <SidebarContent display={{base: 'none', md: 'block'}}/>
-                    <Box ml={{base: 0, md: 60}}>
-                        <Header>
+                <Box bgImg={mark} h='100vh'>
+                    <SidebarContent borderRight='1px solid #00000016' display={{base: 'none', md: 'block'}}/>
+                    <Box ml={{base: 0, md: 60}} display='flex' flexDirection='column' h='full'>
+                        <Header position='sticky' top='0'>
+                            <IconButton onClick={onOpen} icon={<FiList/>} display={{base: 'inline-flex', md: 'none'}}/>
                             <Text fontSize="xl" as="b" alignSelf="center">{props.title}</Text>
-                            {/* <IconButton onClick={onOpen} icon={<FiList/>} display={{base: 'inline-flex', md: 'none'}}/> */}
-                            <Box >
+                            <Box>
                                 <AnimatePresence exitBeforeEnter initial={false}>
                                     <motion.div
-                                    style={{ display: "inline-block" }}
-                                    key={useColorModeValue("light", "dark")}
-                                    initial={{ y: -20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: 20, opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
+                                        style={{display: "inline-block"}}
+                                        key={useColorModeValue("light", "dark")}
+                                        initial={{y: -20, opacity: 0}}
+                                        animate={{y: 0, opacity: 1}}
+                                        exit={{y: 20, opacity: 0}}
+                                        transition={{duration: 0.2}}
                                     >
-                                    <Tooltip
-                                        label={colorMode === "dark" ? "Light Mode" : "Dark Mode"}
-                                        placement="auto"
-                                    >
-                                    <IconButton
-                                        aria-label="Toggle theme"
-                                        colorScheme={useColorModeValue("purple", "orange")}
-                                        icon={useColorModeValue(<MoonIcon />, <SunIcon />)}
-                                        onClick={toggleColorMode}
-                                        marginRight="5px"
-                                        variant="ghost"
-                                        />
-                                    </Tooltip>
+                                        <Tooltip
+                                            label={colorMode === "dark" ? "Light Mode" : "Dark Mode"}
+                                            placement="auto"
+                                        >
+                                            <IconButton
+                                                aria-label="Toggle theme"
+                                                colorScheme={useColorModeValue("purple", "orange")}
+                                                icon={useColorModeValue(<MoonIcon/>, <SunIcon/>)}
+                                                onClick={toggleColorMode}
+                                                marginRight="5px"
+                                                variant="ghost"
+                                            />
+                                        </Tooltip>
                                     </motion.div>
                                 </AnimatePresence>
-                      
-
-                                <Menu id="navbar-menu">
-                                    <MenuButton
-                                    as={IconButton}
-                                    aria-label="Options"
-                                    icon={<HamburgerIcon />}
-                                    variant="outline"
-                                    />
-                    
-                                    <MenuList>
-                                        <MenuItem as={Button} icon={<FaHome />} onClick = {()=>{window.open('/', "_self")}}>
-                                            Home
-                                        </MenuItem>
-                                                        
-                                    </MenuList>
-                                </Menu>
+                            </Box>
+                        </Header>
+                        <Box display='flex' flexDirection='column' flex='1' overflowY='hidden'>
+                            <Box as="main"
+                                 flex='1'
+                                 h='full'
+                                 overflowY='auto'
+                            >
+                                {props.children}
                             </Box>
 
-                        </Header>
-
-
-                        <Box as="main"
-                             pos='relative'
-                        >
-                            {props.children}
                         </Box>
-
-                        <Container
-                            position="fixed"
-                            bottom="0"
-                            ml={{ base:"300px", md: '300px' }}
-                            // align={{ base: 'center', md: 'center' }}
-                            // bgColor="red"
-                            // overflow="auto"
-                        >
-                            <Box
-                                as={Stack}
-                                maxW={'6xl'}
-                                p="4"
-                                direction={{ base: 'column', md: 'column'}}
-                                spacing={4}
-                                justify={{ base: 'center', md: 'space-between' }}
-                                align={{ base: 'center', md: 'center' }}
-    
-                            >
-                                <Badge variant="outline" colorScheme="cyan">
-                                        @2022 SYSU-Software
-                                </Badge>
-                                <Text>All Rights Reserved.</Text>   
-                                    <Layout />
-                                </Box>
-                    </Container>
+                        <Footer/>
                     </Box>
                 </Box>
-                
+
             </Box>
-            
+
             <Drawer isOpen={isOpen} placement='left' onClose={onClose}>
-                <DrawerOverlay />
+                <DrawerOverlay/>
                 <DrawerContent>
                     <DrawerBody>
                         <SidebarContent/>
