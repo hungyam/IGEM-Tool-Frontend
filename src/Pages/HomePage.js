@@ -46,20 +46,15 @@ function BasicStatistics(props) {
 
 
     return (
-        <Box maxW="7xl" mx={'auto'} pt={5} px={{base: 2, sm: 12, md: 17}}>
+        <Box maxW="7xl" mx={'auto'} pt={5} px={{base: 5, md: '15%'}}>
             <chakra.h1
                 textAlign={'center'}
                 fontSize={'3xl'}
                 py={10}
                 fontWeight={'bold'}>
-                The platform accommodates {data.species_count} species and {data.system_count} resistance systems.
+                The platform accommodates {data.species_count} species and {data.system_count} defense systems.
             </chakra.h1>
-            <SimpleGrid columns={{base: 1, md: 3}} spacing={{base: 5, lg: 8}}>
-                <StatsCard
-                    title='Chromosomes'
-                    stat='0'
-                    icon={<SiMicrogenetics size={'3em'}/>}
-                />
+            <SimpleGrid columns={2} spacing={{base: 5, md: 35}}>
                 <StatsCard
                     title={'Archaea'}
                     stat={data.archaea_count}
@@ -76,33 +71,58 @@ function BasicStatistics(props) {
 }
 
 function Chart(props) {
+
+    const data = props.data.sort((a, b) => b.value - a.value)
+
     const option = {
         title: {
             text: props.type,
             textStyle: {
-                color: useColorModeValue('black', 'white')
-            }
-        },
-        xAxis: {
-            type: 'category',
-            data: props.data.x,
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [{
-            type: 'bar',
-            data: props.data.y,
-            itemStyle: {
-                borderRadius: 4,
+                color: useColorModeValue('#000', '#fff')
             },
-            color: props.color
-        }]
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            top: 'bottom',
+            left: 'center',
+            textStyle: {
+                color: useColorModeValue('#000', '#fff')
+            },
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: 'white',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '30',
+                        color: useColorModeValue('#000', '#fff')
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: data
+            }
+        ]
     };
 
     return <ReactECharts
         option={option}
-        style={{height: 400}}
+        style={{height: 550}}
         opts={{renderer: 'svg'}}
     />;
 }
@@ -117,13 +137,14 @@ const HomePage = (props) => {
         bacteria_count: 0,
         species_count: 0,
         system_count: 0,
-        archaea: {},
-        bacteria: {}
+        archaea: [],
+        bacteria: []
     })
 
     useEffect(() => {
         axios.get('http://39.108.14.181:1433/mes/')
             .then((response) => {
+                console.log(response.data.data)
                 setData(response.data.data)
             })
             .catch(() => {
@@ -146,9 +167,9 @@ const HomePage = (props) => {
             >
                 <BasicStatistics data={data}/>
                 <Divider mt='10'/>
-                <SimpleGrid columns={{base: 1, md: 2}} spacing={{base: 5, lg: 8}} mt='10' mx='5'>
-                    <Chart data={data.archaea} type='Archaea' color='skyblue'/>
-                    <Chart data={data.bacteria} type='Bacteria' color='purple'/>
+                <SimpleGrid columns={{base: 1, 'xl': 2}} spacing={{base: 5, lg: 8}} mt='10' mx='25'>
+                    <Chart data={data.archaea} type='Archaea'/>
+                    <Chart data={data.bacteria} type='Bacteria'/>
                 </SimpleGrid>
 
             </Box>

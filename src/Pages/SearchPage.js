@@ -7,14 +7,14 @@ import {
     DrawerContent,
     DrawerHeader,
     DrawerOverlay,
-    Flex,
+    Flex, Grid,
     Heading,
     HStack,
     Input,
     InputGroup,
     InputLeftAddon,
     Link,
-    ListItem,
+    ListItem, SimpleGrid,
     Spacer,
     Table,
     TableContainer,
@@ -60,6 +60,11 @@ export default function SearchPage() {
     }
 
     const downloadAllData = () => {
+        toast({
+            title: 'Waiting',
+            duration: null,
+            status: "loading"
+        })
         axios({
             url: 'http://39.108.14.181:1433/download',
             method: 'GET',
@@ -74,6 +79,7 @@ export default function SearchPage() {
 
             fileLink.click();
             fileLink.remove()
+            toast.closeAll()
         });
     }
 
@@ -122,8 +128,7 @@ export default function SearchPage() {
                     >
                         Keyword
                     </Text>
-                    <HStack mb='5'
-                            spacing='5'
+                    <SimpleGrid columns={{base: 1, lg: 3}} spacing={{base: 3, lg: 6}}
                     >
                         <InputGroup variant='filled'>
                             <InputLeftAddon children='Species:' />
@@ -140,7 +145,7 @@ export default function SearchPage() {
                             <Input value={value_3}
                                    onChange={(e) => setValue_3(e.target.value)}/>
                         </InputGroup>
-                    </HStack>
+                    </SimpleGrid>
                     <Flex justifyContent='flex-end' mt='10'>
                         <Button mr='3'
                                 onClick={Submit}

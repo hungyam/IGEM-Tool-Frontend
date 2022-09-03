@@ -54,6 +54,8 @@ function NavItem(props) {
             bgColor={path === location.pathname && selectedBGColor}
             color={path === location.pathname && selectedColor}
             boxShadow={path === location.pathname && 'sm'}
+            borderRadius={path === location.pathname && 'lg'}
+            mx={path === location.pathname && '1'}
         >
             {icon && (
                 <Icon
@@ -84,7 +86,7 @@ function SidebarContent(props) {
             h="full"
             bg={bgColor}
             backdropBlur='10px'
-            w={{base: 'full', md: '60'}}
+            w={{base: 'full', lg: '60'}}
             {...rest}
         >
             <Center px={10} py={5}>
@@ -204,10 +206,10 @@ export default function Sidebar(props) {
                 minH="100vh"
             >
                 <Box bgImg={mark} h='100vh'>
-                    <SidebarContent borderRight='1px solid #00000016' display={{base: 'none', md: 'block'}}/>
-                    <Box ml={{base: 0, md: 60}} display='flex' flexDirection='column' h='full'>
+                    <SidebarContent borderRight='1px solid #00000016' display={{base: 'none', lg: 'block'}}/>
+                    <Box ml={{base: 0, lg: 60}} display='flex' flexDirection='column' h='full'>
                         <Header position='sticky' top='0'>
-                            <IconButton onClick={onOpen} icon={<FiList/>} display={{base: 'inline-flex', md: 'none'}}/>
+                            <IconButton onClick={onOpen} icon={<FiList/>} display={{base: 'inline-flex', lg: 'none'}}/>
                             <Text fontSize="xl" as="b" alignSelf="center">{props.title}</Text>
                             <Box>
                                 <AnimatePresence exitBeforeEnter initial={false}>
@@ -222,6 +224,7 @@ export default function Sidebar(props) {
                                         <Tooltip
                                             label={colorMode === "dark" ? "Light Mode" : "Dark Mode"}
                                             placement="auto"
+                                            color={useColorModeValue('white', 'black')}
                                         >
                                             <IconButton
                                                 aria-label="Toggle theme"

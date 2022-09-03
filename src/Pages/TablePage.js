@@ -59,6 +59,11 @@ export default function TablePage() {
     const downloadData = () => {
         if (selectId.length === 0)
             return false
+        toast({
+            title: 'Waiting',
+            duration: null,
+            status: "loading"
+        })
         axios({
             url: 'http://39.108.14.181:1433/download/',
             data: {'index': selectId},
@@ -74,6 +79,7 @@ export default function TablePage() {
 
             fileLink.click();
             fileLink.remove()
+            toast.closeAll()
         });
     }
 
@@ -210,7 +216,7 @@ export default function TablePage() {
                                             <Spinner size='lg'/>
                                         </Center> :
                                         <Center w='100%'>
-                                            <Text fontSize='lg'>下拉加载更多数据</Text>
+                                            <Text fontSize='lg'>Request more data</Text>
                                         </Center>
                                     }
                                 </TableCaption>

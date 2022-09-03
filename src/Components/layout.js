@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, IconButton, Tooltip} from "@chakra-ui/react";
+import {Box, IconButton, Tooltip, useColorModeValue} from "@chakra-ui/react";
 import {EmailIcon, LinkIcon,} from "@chakra-ui/icons";
 import {FaGithub,} from "react-icons/fa";
 
@@ -20,7 +20,7 @@ const RouteChange = (opt) => {
 export default function Layout(props) {
     return (
         <Box display='flex' justifyItems='center'>
-            <Tooltip label="Github" placement="auto-start">
+            <Tooltip label="Github" placement="auto-start" color={useColorModeValue('white', 'black')}>
                 <IconButton
                     colorScheme="tail"
                     icon={<FaGithub/>}
@@ -30,7 +30,7 @@ export default function Layout(props) {
                 />
             </Tooltip>
 
-            <Tooltip label="Email" placement="auto-start">
+            <Tooltip label="Email" placement="auto-start" color={useColorModeValue('white', 'black')}>
                 <IconButton
                     colorScheme="tail"
                     icon={<EmailIcon/>}
@@ -40,7 +40,7 @@ export default function Layout(props) {
                 />
             </Tooltip>
 
-            <Tooltip label="Sun Yat-sen University Home Page" placement="auto-start">
+            <Tooltip label="Sun Yat-sen University Home Page" placement="auto-start" color={useColorModeValue('white', 'black')}>
                 <IconButton
                     colorScheme="tail"
                     icon={<LinkIcon/>}
